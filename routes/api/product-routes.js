@@ -9,10 +9,18 @@ router.get('/', (req, res) => {
   // be sure to include its associated Category and Tag data
   Product.findAll({
     include: [{
-      model: Category
+      model: Category,
+      foreignKey: 'category_id'
     },
-  {model: Tag}]
+  {model: Tag,
+  through: ProductTag, 
+  foreignKey: 'tag_id'}]
   })
+    .then(productData => res.json(productData))
+    .catch(err => {
+      console.log(err)
+      res.status(500).json(err)
+    })
 });
 
 // get one product
